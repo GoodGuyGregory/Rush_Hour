@@ -40,6 +40,17 @@ public class Car {
         this.position = position;
     }
 
+    public boolean isBlocked(TrafficGrid grid) {
+        // check if the position above is the end or blocked...
+        if (this.position.length < grid.getParkingLotSize()) {
+            return true;
+        }
+
+        // check if right is blocked...
+
+        // check if below is blocked...
+    }
+
 
 
 }
