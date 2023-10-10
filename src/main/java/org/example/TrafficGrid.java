@@ -35,13 +35,11 @@ public class TrafficGrid {
     }
 
 
-    public TrafficGrid initializeBoard() {}
-
-    public moveCars() {}
-
-    public TrafficGrid captureState() {
-        return currentState
+    public void initializeBoard() {
     }
+
+    public void moveCars() {}
+
 
 
 }

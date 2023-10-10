@@ -49,6 +49,8 @@ public class Car {
         // check if right is blocked...
 
         // check if below is blocked...
+
+        return false;
     }
 
 
