@@ -6,7 +6,14 @@ public class Biker {
     private int colPosition;
     private int[] goalPosition;
 
-    public Biker() {}
+    public Biker() {
+    }
+
+    public Biker(int rowPos, int colPos, int[] goalPos) {
+        this.rowPosition = rowPos;
+        this.colPosition = colPos;
+        this.goalPosition = goalPos;
+    }
 
     public int getRowPosition() {
         return this.rowPosition;
@@ -31,6 +38,5 @@ public class Biker {
     public void setGoalPosition(int[] goalPosition) {
         this.goalPosition = goalPosition;
     }
-
 
 }
