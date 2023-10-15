@@ -2,57 +2,51 @@ package org.example;
 
 public class Car {
 
-    private String id;
-    private String orientation;
+    private Orientation orientation;
+    private int rowPosition;
+    private int colPosition;
+    private char symbol;
 
-    private boolean touched;
-    private int[][] position;
-
-    public String getId() {
-        return id;
+    public Car() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Car(Orientation orientation, int rowPos, int colPos, char symbol) {
+        this.orientation = orientation;
+        this.rowPosition = rowPos;
+        this.colPosition = colPos;
+        this.symbol = symbol;
     }
 
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(String orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
 
-    public boolean isTouched() {
-        return touched;
+    public int getRowPosition() {
+        return rowPosition;
     }
 
-    public void setTouched(boolean touched) {
-        this.touched = touched;
+    public void setRowPosition(int rowPos) {
+        this.rowPosition =rowPos;
     }
 
-    public int[][] getPosition() {
-        return position;
+    public int getColPosition() {
+        return colPosition;
     }
 
-    public void setPosition(int[][] position) {
-        this.position = position;
+    public void setColPosition(int colPos) {
+        this.colPosition = colPos;
     }
 
-    public boolean isBlocked(TrafficGrid grid) {
-        // check if the position above is the end or blocked...
-        if (this.position.length < grid.getParkingLotSize()) {
-            return true;
-        }
-
-        // check if right is blocked...
-
-        // check if below is blocked...
-
-        return false;
+    public char getSymbol() {
+        return symbol;
     }
 
-
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
+    }
 
 }
