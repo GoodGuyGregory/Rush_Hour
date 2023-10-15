@@ -49,4 +49,6 @@ This work is licensed under the "MIT License". Please see the file
 
 # Sources
 
+[Reading Files in Java](https://www.geeksforgeeks.org/different-ways-reading-text-file-java/)
+
 [Command Line Args in VSCODE](https://www.youtube.com/watch?v=zSljcz54pYQ)

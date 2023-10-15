@@ -147,7 +147,7 @@ public class TrafficGrid {
             }
         }
         this.movesCounter = countedMoves;
-        return this.currentState;
+        return this;
 
     }
 

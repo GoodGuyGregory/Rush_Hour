@@ -46,9 +46,6 @@ public class BugRushReader {
 
         gridHeight = gridContainer.size();
 
-        // remove the first row...
-        gridContainer.remove(0);
-
         this.initialState = produceGrid(gridContainer,gridWidth, gridHeight);
     }
 
