@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 // Handles the reading process of the problems...
 // https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
 public class BugRushReader {
-
 
     // set up the scanner logic to read the
     private TrafficGrid initialState;
@@ -23,7 +21,8 @@ public class BugRushReader {
         this.initialState = initialState;
     }
 
-    public BugRushReader() {}
+    public BugRushReader() {
+    }
 
     // reads file and sets initial state of the parkingLot
     public void readBugRushFile(String fileName) throws FileNotFoundException {
@@ -47,9 +46,8 @@ public class BugRushReader {
         gridHeight = gridContainer.size();
 
         // remove the first row...
-        gridContainer.remove(0);
 
-        this.initialState = produceGrid(gridContainer,gridWidth, gridHeight);
+        this.initialState = produceGrid(gridContainer, gridWidth, gridHeight);
     }
 
     public TrafficGrid produceGrid(List<String> gridContainer, int gridWidth, int gridHeight) {
@@ -59,14 +57,12 @@ public class BugRushReader {
             // cast the string row into a char array to iterate
             char[] parkingSpaces = gridContainer.get(i).toCharArray();
             for (int j = 0; j < parkingLot.length; j++) {
-               // place characters into grid.
+                // place characters into grid.
                 parkingLot[i][j] = parkingSpaces[j];
             }
         }
 
-        return new TrafficGrid(gridWidth,gridHeight,parkingLot);
+        return new TrafficGrid(gridWidth, gridHeight, parkingLot);
     }
-
-
 
 }
