@@ -49,12 +49,12 @@ public class BugRushReader {
     }
 
     public TrafficGrid produceGrid(List<String> gridContainer, int gridWidth, int gridHeight) {
-        char[][] parkingLot = new char[gridWidth][gridHeight];
+        char[][] parkingLot = new char[gridHeight][gridWidth];
 
         for (int i = 0; i < gridContainer.size(); i++) {
             // cast the string row into a char array to iterate
             char[] parkingSpaces = gridContainer.get(i).toCharArray();
-            for (int j = 0; j < parkingLot.length; j++) {
+            for (int j = 0; j < gridWidth; j++) {
                 // place characters into grid.
                 parkingLot[i][j] = parkingSpaces[j];
             }
