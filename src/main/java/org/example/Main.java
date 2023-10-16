@@ -15,6 +15,7 @@ public class Main {
         Queue<TrafficGrid> trafficGrids = new PriorityQueue<TrafficGrid>();
         Set<TrafficGrid> transitionStates = new HashSet<TrafficGrid>();
 
+
         // get the users requested puzzle
         try {
             String requestedFile = System.getProperty("user.dir") + args[0];
@@ -27,11 +28,30 @@ public class Main {
                 trafficGrids.add(initialState);
 
                 // begin transition state logic..
+                
+                int totalMoves = 0;
 
                 while (trafficGrids.size() > 0) {
                     TrafficGrid state = trafficGrids.remove();
-                    state.moveCars();
-                    transitionStates.add(state);
+
+
+                    if (state.getBiker().isGoalReached()) {
+                        // found the way...
+                        System.out.println("solved in " + state.getMovesCounter() + " moves");
+                        break;
+                    }
+                    else {
+                        state.moveCars();
+//                        totalMoves += state.getMovesCounter();
+                        trafficGrids.add(state);
+                        // add the state into the collection of previous states for memoization
+  //                      if (!transitionStates.contains(state)) {
+//                            transitionStates.add(state);
+//
+//                        }
+                    }
+
+
                 }
 
 

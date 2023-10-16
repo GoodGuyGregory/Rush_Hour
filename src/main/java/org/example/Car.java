@@ -6,6 +6,7 @@ public class Car {
     private int rowPosition;
     private int colPosition;
     private char symbol;
+    private boolean checked;
 
     public Car() {
     }
@@ -15,6 +16,7 @@ public class Car {
         this.rowPosition = rowPos;
         this.colPosition = colPos;
         this.symbol = symbol;
+        this.checked = false;
     }
 
     public Orientation getOrientation() {
@@ -47,6 +49,14 @@ public class Car {
 
     public void setSymbol(char symbol) {
         this.symbol = symbol;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
 }
