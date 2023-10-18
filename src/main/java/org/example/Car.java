@@ -2,29 +2,19 @@ package org.example;
 
 public class Car {
 
-    private Orientation orientation;
     private int rowPosition;
     private int colPosition;
     private char symbol;
-    private boolean checked;
+    private boolean visited;
 
     public Car() {
     }
 
-    public Car(Orientation orientation, int rowPos, int colPos, char symbol) {
-        this.orientation = orientation;
+    public Car( int rowPos, int colPos, char symbol) {
         this.rowPosition = rowPos;
         this.colPosition = colPos;
         this.symbol = symbol;
-        this.checked = false;
-    }
-
-    public Orientation getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
+        this.visited = false;
     }
 
     public int getRowPosition() {
@@ -42,21 +32,23 @@ public class Car {
     public void setColPosition(int colPos) {
         this.colPosition = colPos;
     }
-
     public char getSymbol() {
-        return symbol;
+        return this.symbol;
     }
 
-    public void setSymbol(char symbol) {
+    public void  setSymbol(char symbol) {
         this.symbol = symbol;
     }
 
-    public boolean isChecked() {
-        return checked;
+    public boolean isVisited() {
+        return visited;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
+
+
+
 
 }
