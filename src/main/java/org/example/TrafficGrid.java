@@ -83,24 +83,6 @@ public class TrafficGrid{
         }
     }
 
-    public void locateCars() {
-        for (int i = 0; i < currentState.length; i++) {
-            for (int j = 0; j < currentState.length; j++) {
-
-                if (currentState[i][j] == '-') {
-                    Car foundCar = new Car(i, j, '-');
-                    this.idleCars.add(foundCar);
-                }
-
-                if (currentState[i][j] == '|') {
-                    Car foundCar = new Car( i, j,'|');
-
-                    this.idleCars.add(foundCar);
-                }
-
-            }
-        }
-    }
 
 //    public boolean moveSingleCar(Car car) {
 //        if (car.getOrientation() == Orientation.Horizontal) {

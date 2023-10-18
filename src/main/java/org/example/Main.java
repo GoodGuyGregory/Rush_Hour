@@ -1,7 +1,7 @@
 package org.example;
 
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 
@@ -9,48 +9,69 @@ public class Main {
     public static Queue<TrafficState> trafficStates = new PriorityQueue<TrafficState>();
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
 
-
-    public static TrafficState moveVehicle(TrafficState trafficState, int parkingWidth, int parkingHeight) {
-        // iterate through the parkingLot
-        char[][] parkingLot = trafficState.getCurrentState();
-        for (int i = 0; i < parkingHeight; i++) {
-            for (int j = 0; j < parkingHeight; j++) {
-                // if vertical Car...
-                // add all vertical Car logic.
-                if (parkingLot[i][j] == '|') {
-                    Car parkedCar = new Car(i, j, '|');
-                    if (verticalMove(parkedCar, parkingWidth, parkingLot)) {
-                        trafficState.setCurrentState(parkingLot);
-                        trafficState.setMovesWeight(trafficState.getMovesWeight()+1);
-                        return trafficState;
-                    }
-                }
-                // if horizontal Car...
-                // add all horizontal logic..
-                if (parkingLot[i][j] == '-' || parkingLot[i][j] == '>') {
-                    if (parkingLot[i][j] == '-') {
-                        Car parkedCar = new Car(i, j, '-');
-                        if (horizontalMove(parkedCar, parkingWidth, parkingLot)) {
-                            trafficState.setCurrentState(parkingLot);
-                            trafficState.setMovesWeight(trafficState.getMovesWeight()+1);
-                            return trafficState;
-                        }
-
-                    }
-                    if (parkingLot[i][j] == '>') {
-                        Car parkedCar = new Car(i, j, '>');
-                        if (horizontalMove(parkedCar, parkingWidth, parkingLot)) {
-                            trafficState.setCurrentState(parkingLot);
-                            trafficState.setMovesWeight(trafficState.getMovesWeight()+1);
-                            return trafficState;
-                        }
-                    }
-                }
+    public static char[][] initialParkingLot(char[][] intialLot) {
+        char[][] deepCopyParkingLot = new char[intialLot.length][intialLot[0].length];
+        for (int i = 0; i < intialLot.length; i++) {
+            for (int j = 0; j < intialLot[0].length; j++) {
+                deepCopyParkingLot[i][j] = intialLot[i][j];
             }
         }
-        trafficState.setCurrentState(parkingLot);
-        return trafficState;
+        return deepCopyParkingLot;
     }
+
+    // Padma Lochan's Answer
+    //https://www.quora.com/What-is-the-right-way-to-deep-copy-an-object-in-Java-How-do-you-do-it-in-your-code
+    public static char[][] deepClone(char[][] initialLot)
+    {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(initialLot);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+            return (char[][]) ois.readObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void getNextStates(TrafficState trafficState, List<Car> idleCars, int parkingWidth, int parkingHeight) {
+        // iterate through the parkingLot
+        char[][] parkingLot = trafficState.getCurrentState();
+        char[][] transitionalLot = deepClone(parkingLot);
+        for (Car idleCar: idleCars) {
+            // if vertical Car...
+            // add all vertical Car logic.
+            if (idleCar.getSymbol() == '|') {
+                if (verticalMove(idleCar, parkingHeight, transitionalLot)) {
+                    // weight for path..
+                    // set transition state..
+                    TrafficState transitionalState = new TrafficState();
+                    transitionalState.setMovesWeight(trafficState.getMovesWeight()+1);
+                    transitionalState.setCurrentState(transitionalLot);
+                    trafficStates.add(transitionalState);
+                    transitionalLot = deepClone(parkingLot);
+                }
+            }
+            // if horizontal Car...
+            // add all horizontal logic..
+            if (idleCar.getSymbol() == '>' || idleCar.getSymbol() == '-') {
+                if (horizontalMove(idleCar, parkingWidth, transitionalLot)) {
+                    // weight for path..
+                    // set transition state..
+                    TrafficState transitionalState = new TrafficState();
+                    transitionalState.setMovesWeight(trafficState.getMovesWeight()+1);
+                    transitionalState.setCurrentState(transitionalLot);
+                    trafficStates.add(transitionalState);
+                    transitionalLot = deepClone(parkingLot);
+                }
+            }
+
+        }
+    }
+
 
     public static boolean horizontalMove(Car movingCar, int parkingLotWidth, char[][] currentState) {
         // look left logic
@@ -384,6 +405,33 @@ public class Main {
         previousStates.put(currentStateKey, new TrafficState(providedState));
     }
 
+    public static List<Car> locateCars(char[][] currentState, int parkingWidth, int parkingHeight) {
+        List<Car> idleCars = new ArrayList<Car>();
+        for (int i = 0; i < parkingWidth; i++) {
+            for (int j = 0; j < parkingHeight; j++) {
+
+                if (currentState[i][j] == '-') {
+                    Car foundCar = new Car(i, j, '-');
+                    idleCars.add(foundCar);
+                }
+
+                if (currentState[i][j] == '|') {
+                    Car foundCar = new Car( i, j,'|');
+
+                    idleCars.add(foundCar);
+                }
+
+                if (currentState[i][j] == '>') {
+                    Car foundCar = new Car( i, j,'>');
+
+                    idleCars.add(foundCar);
+                }
+
+            }
+        }
+        return idleCars;
+    }
+
     public static void determineGoalState(TrafficGrid grid) {
         char[][] initialState = grid.getCurrentState();
         for (int i = 0; i < grid.getParkingLotWidth(); i++) {
@@ -412,7 +460,7 @@ public class Main {
                 parkingLotHeight = trafficGrid.getParkingLotHeight();
 
                 determineGoalState(trafficGrid);
-
+                trafficGrid.setIdleCars(locateCars(trafficGrid.getCurrentState(),parkingLotWidth, parkingLotHeight));
 
 
                 TrafficState initialState = new TrafficState(trafficGrid.getCurrentState());
@@ -436,9 +484,7 @@ public class Main {
                         break;
                     }
                     else {
-                        TrafficState transitionState = moveVehicle(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
-                        trafficStates.add(transitionState);
-                        trafficGrid.setMovesMade(transitionState.getMovesWeight());
+                        getNextStates(currentTrafficGrid, trafficGrid.getIdleCars(),trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
                 }
 
