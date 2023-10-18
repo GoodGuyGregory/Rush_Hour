@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Biker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Biker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Car.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/TrafficGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/TrafficGrid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +104,7 @@
       <workItem from="1697212230741" duration="13000" />
       <workItem from="1697255172116" duration="69000" />
       <workItem from="1697462743602" duration="22855000" />
-      <workItem from="1697591165801" duration="9131000" />
+      <workItem from="1697591165801" duration="9657000" />
     </task>
     <servers />
   </component>
