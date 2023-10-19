@@ -21,8 +21,7 @@ public class Main {
 
     // Padma Lochan's Answer
     //https://www.quora.com/What-is-the-right-way-to-deep-copy-an-object-in-Java-How-do-you-do-it-in-your-code
-    public static char[][] deepClone(char[][] initialLot)
-    {
+    public static char[][] deepClone(char[][] initialLot) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -30,8 +29,7 @@ public class Main {
             oos.writeObject(initialLot);
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
             return (char[][]) ois.readObject();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -41,7 +39,7 @@ public class Main {
         // iterate through the parkingLot
         char[][] parkingLot = trafficState.getCurrentState();
         char[][] transitionalLot = deepClone(parkingLot);
-        for (Car idleCar: idleCars) {
+        for (Car idleCar : trafficState.getIdleCars()) {
             // if vertical Car...
             // add all vertical Car logic.
             if (idleCar.getSymbol() == '|') {
@@ -49,7 +47,7 @@ public class Main {
                     // weight for path..
                     // set transition state..
                     TrafficState transitionalState = new TrafficState();
-                    transitionalState.setMovesWeight(trafficState.getMovesWeight()+1);
+                    transitionalState.setMovesWeight(trafficState.getMovesWeight() + 1);
                     transitionalState.setCurrentState(transitionalLot);
                     trafficStates.add(transitionalState);
                     transitionalLot = deepClone(parkingLot);
@@ -62,7 +60,7 @@ public class Main {
                     // weight for path..
                     // set transition state..
                     TrafficState transitionalState = new TrafficState();
-                    transitionalState.setMovesWeight(trafficState.getMovesWeight()+1);
+                    transitionalState.setMovesWeight(trafficState.getMovesWeight() + 1);
                     transitionalState.setCurrentState(transitionalLot);
                     trafficStates.add(transitionalState);
                     transitionalLot = deepClone(parkingLot);
@@ -464,6 +462,8 @@ public class Main {
 
 
                 TrafficState initialState = new TrafficState(trafficGrid.getCurrentState());
+                initialState.setIdleCars(locateCars(initialState.getCurrentState(),parkingLotWidth, parkingLotHeight));
+
                 // add to the queue
                 trafficStates.add(initialState);
                 // add to the steps to prevent back stepping
@@ -477,14 +477,15 @@ public class Main {
                 while (trafficStates.size() > 0) {
                     TrafficState currentTrafficGrid = trafficStates.remove();
 
-                    char[][] currentState = currentTrafficGrid.getCurrentState();
-                    if (checkGoalClear(currentState, parkingLotWidth, parkingLotHeight)) {
+                    currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
+
+                    if (checkGoalClear(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight)) {
                         // found the way...
-                        System.out.println("solved in "+ trafficGrid.getMovesMade() + " moves");
+                        System.out.println("solved in "+ currentTrafficGrid.getMovesWeight() + " moves");
                         break;
                     }
                     else {
-                        getNextStates(currentTrafficGrid, trafficGrid.getIdleCars(),trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
+                        getNextStates(currentTrafficGrid, currentTrafficGrid.getIdleCars(),trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
                 }
 
