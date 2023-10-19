@@ -1,9 +1,12 @@
 package org.example;
 
+import java.util.List;
+
 public class TrafficState implements Comparable<TrafficState>{
 
     private char[][] currentState;
     private int movesWeight;
+    private List<Car> idleCars;
 
     public char[][] getCurrentState() {
         return currentState;
@@ -19,6 +22,14 @@ public class TrafficState implements Comparable<TrafficState>{
 
     public void setMovesWeight(int movesWeight) {
         this.movesWeight = movesWeight;
+    }
+
+    public List<Car> getIdleCars() {
+        return idleCars;
+    }
+
+    public void setIdleCars(List<Car> idleCars) {
+        this.idleCars = idleCars;
     }
 
     public TrafficState() {
