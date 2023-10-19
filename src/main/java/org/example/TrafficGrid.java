@@ -12,7 +12,7 @@ public class TrafficGrid{
     private char[][] currentState;
     private int[] goalState;
     private int movesMade;
-    private List<Car> idleCars;
+
 
 
     public TrafficGrid() {
@@ -66,13 +66,6 @@ public class TrafficGrid{
         this.goalState = goalState;
     }
 
-    public List<Car> getIdleCars() {
-        return idleCars;
-    }
-
-    public void setIdleCars(List<Car> idleCars) {
-        this.idleCars = idleCars;
-    }
 
     public void printTrafficGrid() {
         for (int i = 0; i < currentState.length; i++) {
