@@ -8,6 +8,7 @@ import java.util.*;
 public class Main {
     public static Queue<TrafficState> trafficStates = new PriorityQueue<TrafficState>();
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
+    public static TrafficGrid initialGrid = null;
 
     public static char[][] initialParkingLot(char[][] intialLot) {
         char[][] deepCopyParkingLot = new char[intialLot.length][intialLot[0].length];
@@ -34,16 +35,29 @@ public class Main {
             return null;
         }
     }
+    public static List<Car> deepCloneCars(List<Car> intialList) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(intialList);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+            return (List<Car>) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-    public static void getNextStates(TrafficState trafficState, List<Car> idleCars, int parkingWidth, int parkingHeight) {
+    public static void getNextStates(TrafficState trafficState, int parkingWidth, int parkingHeight) {
         // iterate through the parkingLot
         char[][] parkingLot = trafficState.getCurrentState();
         char[][] transitionalLot = deepClone(parkingLot);
+        List<Car> initalCarList = trafficState.idleCars(trafficState.getCurrentState());
         for (Car idleCar : trafficState.getIdleCars()) {
             // if vertical Car...
             // add all vertical Car logic.
             if (idleCar.getSymbol() == '|') {
-                if (verticalMove(idleCar, parkingHeight, transitionalLot, idleCars)) {
+                if (verticalMove(idleCar, parkingHeight, transitionalLot, trafficState.getIdleCars())) {
                     // weight for path..
                     // set transition state..
                     TrafficState transitionalState = new TrafficState();
@@ -51,27 +65,27 @@ public class Main {
                     transitionalState.setCurrentState(transitionalLot);
                     trafficStates.add(transitionalState);
                     transitionalLot = deepClone(parkingLot);
+                    trafficState.setIdleCars(initalCarList);
                 }
             }
             // if horizontal Car...
             // add all horizontal logic..
             if (idleCar.getSymbol() == '>' || idleCar.getSymbol() == '-') {
-                if (horizontalMove(idleCar, parkingWidth, transitionalLot, idleCars)) {
-                    // weight for path..
-                    // set transition state..
+                if (horizontalMove(idleCar, parkingWidth, transitionalLot, trafficState.getIdleCars())) {
                     TrafficState transitionalState = new TrafficState();
                     transitionalState.setMovesWeight(trafficState.getMovesWeight() + 1);
                     transitionalState.setCurrentState(transitionalLot);
                     trafficStates.add(transitionalState);
                     transitionalLot = deepClone(parkingLot);
+                    trafficState.setIdleCars(initalCarList);
                 }
             }
-
         }
     }
 
 
     public static boolean horizontalMove(Car movingCar, int parkingLotWidth, char[][] currentState, List<Car> idleCars) {
+
         // look left logic
         // determine the car isn't parked at the edge of a row
         // middle scenario
@@ -97,40 +111,31 @@ public class Main {
                 }).findFirst().orElse(null);
 
                 if (Objects.nonNull(leftBlockingCar) && !leftBlockingCar.isVisited()) {
-                        leftBlockingCar.setVisited(true);
-                        return moveSingleCar(leftBlockingCar, currentState, idleCars);
-                    }
-                }
-                // check right space
-                // let's potentially move it
-                char rightSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() + 1];
-                // check for opening
-                if (Character.isSpaceChar(rightSpace)) {
-                    // make the move right
-                    if (cleanHorizMoveHelper(movingCar, "right", currentState)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    // blocked on right.
-                    // check to see if the block can move...
-                    Car rightBlockingCar = idleCars.stream().filter(car -> {
-                        if ((car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1))) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }).findFirst().orElse(null);
-
-                    if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
-                        rightBlockingCar.setVisited(true);
-                        return moveSingleCar(rightBlockingCar,currentState,idleCars);
-                    }
-                    return false;
+                    leftBlockingCar.setVisited(true);
+                    return moveSingleCar(leftBlockingCar, currentState, idleCars);
                 }
             }
-         else {
+            // check right space
+            // let's potentially move it
+            char rightSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() + 1];
+            // check for opening
+            if (Character.isSpaceChar(rightSpace)) {
+                // make the move right
+                return cleanHorizMoveHelper(movingCar, "right", currentState);
+            } else {
+                // blocked on right.
+                // check to see if the block can move...
+                Car rightBlockingCar = idleCars.stream().filter(car -> {
+                    return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1));
+                }).findFirst().orElse(null);
+
+                if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
+                    rightBlockingCar.setVisited(true);
+                    return moveSingleCar(rightBlockingCar, currentState, idleCars);
+                }
+                return false;
+            }
+        } else {
             // left most position
             if (movingCar.getColPosition() == 0) {
                 // stuck in the last position for left moves..
@@ -141,19 +146,17 @@ public class Main {
                 if (Character.isSpaceChar(rightSpace)) {
                     // make the move right
                     if (cleanHorizMoveHelper(movingCar, "right", currentState)) {
+                        printTrafficGrid(currentState, idleCars);
                         return true;
-                    } else {
+                    }
+                    else {
                         return false;
                     }
                 } else {
                     // blocked on the right
                     // check to see if the block can move...
                     Car rightBlockingCar = idleCars.stream().filter(car -> {
-                        if ((car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1))) {
-                            return true;
-                        } else {
-                            return false;
-                        }
+                        return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1));
                     }).findFirst().orElse(null);
 
                     if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
@@ -166,40 +169,30 @@ public class Main {
             }
         }
 
-    // Right position look left
-            if(movingCar.getColPosition()==(parkingLotWidth -1)) {
-                // stuck in the right position need to look for below moves
-                // let's potentially move it
-                char leftSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() - 1];
-                // check for opening
-                if (Character.isSpaceChar(leftSpace)) {
-                    if (cleanHorizMoveHelper(movingCar, "left", currentState)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                        // blocked on the left
-                        // check to see if the block can move...
-                        Car leftBlockingCar = idleCars.stream().filter(car -> {
-                            if ((car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() - 1))) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }).findFirst().orElse(null);
+        // Right position look left
+        if (movingCar.getColPosition() == (parkingLotWidth - 1)) {
+            // stuck in the right position need to look for below moves
+            // let's potentially move it
+            char leftSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() - 1];
+            // check for opening
+            if (Character.isSpaceChar(leftSpace)) {
+                return cleanHorizMoveHelper(movingCar, "left", currentState);
+            } else {
+                // blocked on the left
+                // check to see if the block can move...
+                Car leftBlockingCar = idleCars.stream().filter(car -> {
+                    return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() - 1));
+                }).findFirst().orElse(null);
 
-                        if (Objects.nonNull(leftBlockingCar)&& !leftBlockingCar.isVisited()) {
-                            leftBlockingCar.setVisited(true);
-                            return moveSingleCar(leftBlockingCar, currentState, idleCars);
-                        }
-                        return false;
-                    }
-                } return false;
+                if (Objects.nonNull(leftBlockingCar) && !leftBlockingCar.isVisited()) {
+                    leftBlockingCar.setVisited(true);
+                    return moveSingleCar(leftBlockingCar, currentState, idleCars);
+                }
+                return false;
+            }
         }
-
-
-
+        return false;
+    }
 
 
     public static boolean verticalMove(Car movingCar, int parkingLotHeight, char[][] currentState, List<Car> idleCars) {
@@ -213,6 +206,7 @@ public class Main {
             // check for opening
             if (Character.isSpaceChar(aboveSpace)) {
                 if (cleanVertMoveHelper(movingCar, "up", currentState)) {
+                    printTrafficGrid(currentState, idleCars);
                     return true;
                 }
             } else {
@@ -228,7 +222,13 @@ public class Main {
 
                 if (Objects.nonNull(aboveBlockingCar) && !aboveBlockingCar.isVisited()) {
                     aboveBlockingCar.setVisited(true);
-                    return moveSingleCar(aboveBlockingCar, currentState, idleCars);
+                    if ( moveSingleCar(aboveBlockingCar, currentState, idleCars)) {
+                        printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+                        return  false;
+                    }
                 }
             }
 
@@ -240,6 +240,7 @@ public class Main {
             // check for opening
             if (Character.isSpaceChar(downSpace)) {
                 if (cleanVertMoveHelper(movingCar, "down", currentState)) {
+                    printTrafficGrid(currentState, idleCars);
                     return true;
                 }
             } else {
@@ -255,7 +256,13 @@ public class Main {
 
                 if (Objects.nonNull(belowBlockingCar) && !belowBlockingCar.isVisited()) {
                     belowBlockingCar.setVisited(true);
-                    return moveSingleCar(belowBlockingCar, currentState, idleCars);
+                    if( moveSingleCar(belowBlockingCar, currentState, idleCars)) {
+                        printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
                 }
                 return false;
@@ -270,6 +277,7 @@ public class Main {
             // check for opening
             if (Character.isSpaceChar(downwardSpace)) {
                 if (cleanVertMoveHelper(movingCar, "down", currentState)) {
+                    printTrafficGrid(currentState, idleCars);
                     return true;
                 } else {
                     return false;
@@ -287,7 +295,13 @@ public class Main {
 
                 if (Objects.nonNull(belowBlockingCar) && !belowBlockingCar.isVisited()) {
                     belowBlockingCar.setVisited(true);
-                    return moveSingleCar(belowBlockingCar, currentState, idleCars);
+                    if (moveSingleCar(belowBlockingCar, currentState, idleCars)) {
+                        printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
             return false;
@@ -301,6 +315,7 @@ public class Main {
             // check for opening
             if (Character.isSpaceChar(aboveSpace)) {
                 if (cleanVertMoveHelper(movingCar, "up", currentState)) {
+                    printTrafficGrid(currentState, idleCars);
                     return true;
                 } else {
                     return false;
@@ -319,7 +334,13 @@ public class Main {
 
                 if (Objects.nonNull(aboveBlockingCar) && !aboveBlockingCar.isVisited()) {
                     aboveBlockingCar.setVisited(true);
-                    return moveSingleCar(aboveBlockingCar, currentState, idleCars);
+                    if (moveSingleCar(aboveBlockingCar, currentState, idleCars)) {
+                        printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
                 }
                 return false;
@@ -329,21 +350,22 @@ public class Main {
         return false;
     }
 
-    public static boolean moveSingleCar(Car car, char[][] currentState, List<Car> idleCars ) {
+    public static boolean moveSingleCar(Car car, char[][] currentState, List<Car> idleCars) {
         if (car.getSymbol() == '-' || car.getSymbol() == '>') {
-            if (horizontalMove(car, currentState[0].length, currentState,  idleCars)) {
+            if (horizontalMove(car, currentState[0].length, currentState, idleCars)) {
+                car.setVisited(true);
+                printTrafficGrid(currentState, idleCars);
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
         if (car.getSymbol() == '|') {
             if (verticalMove(car,currentState.length,currentState, idleCars)) {
                 car.setVisited(true);
+                printTrafficGrid(currentState, idleCars);
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -390,7 +412,6 @@ public class Main {
             }
         }
     }
-
 
 
     public static boolean cleanVertMoveHelper(Car movingCar, String direction, char[][] currentState) {
@@ -454,23 +475,20 @@ public class Main {
 
     public static List<Car> locateCars(char[][] currentState, int parkingWidth, int parkingHeight) {
         List<Car> idleCars = new ArrayList<Car>();
-        for (int i = 0; i < parkingWidth; i++) {
-            for (int j = 0; j < parkingHeight; j++) {
-
+        for (int i = 0; i < currentState.length; i++) {
+            for (int j = 0; j < currentState[0].length; j++) {
                 if (currentState[i][j] == '-') {
                     Car foundCar = new Car(i, j, '-');
                     idleCars.add(foundCar);
                 }
 
                 if (currentState[i][j] == '|') {
-                    Car foundCar = new Car( i, j,'|');
-
+                    Car foundCar = new Car(i, j, '|');
                     idleCars.add(foundCar);
                 }
 
                 if (currentState[i][j] == '>') {
-                    Car foundCar = new Car( i, j,'>');
-
+                    Car foundCar = new Car(i, j, '>');
                     idleCars.add(foundCar);
                 }
 
@@ -481,14 +499,68 @@ public class Main {
 
     public static void determineGoalState(TrafficGrid grid) {
         char[][] initialState = grid.getCurrentState();
-        for (int i = 0; i < grid.getParkingLotWidth(); i++) {
-            for (int j = 0; j < grid.getParkingLotHeight(); j++) {
+        for (int i = 0; i < initialState.length; i++) {
+            for (int j = 0; j < initialState[0].length; j++) {
                 if (initialState[i][j] == '>') {
-                    int[] goalCoordinates = {(i),(grid.getParkingLotHeight()-1)};
+                    int[] goalCoordinates = {(i),(grid.getParkingLotWidth()-1)};
                     grid.setGoalState(goalCoordinates);
+
                 }
             }
         }
+
+    }
+
+    public static boolean checkGoalClear(TrafficState currentState,TrafficGrid trafficGrid) {
+        // count backwards and determine if the path is clear to stop wasted moves...
+        char[][] cs = currentState.getCurrentState();
+        for (int i = 0; i < cs[0].length; i++) {
+            for (int j = 0; j < cs.length; j++) {
+                if (cs[i][j] == '>') {
+                    int k = 0;
+                    while (k < cs[0].length-1) {
+                        if (cs[i][k+1] == ' ') {
+                            k++;
+                        }
+                        else {
+                            // still have moving to do..
+                            return false;
+                        }
+                    }
+                    // add the clear moves...
+                    currentState.setMovesWeight(currentState.getMovesWeight()+k);
+                    return true;
+                }
+            }
+        }
+        // something wrong.
+        return false;
+    }
+
+    public static void printTrafficGrid(char[][] currentState, List<Car> idleCarsState) {
+        printInitialState();
+        for (int i = 0; i < currentState.length; i++) {
+            for (int j = 0; j < currentState[0].length; j++) {
+                System.out.print(currentState[i][j]);
+            }
+            System.out.println();
+        }
+
+        for (Car car: idleCarsState) {
+            System.out.print("["+ "{:" + String.valueOf(car.getSymbol())+ ":}" +" "+ "x:" + String.valueOf(car.getColPosition()) + " y:" + String.valueOf(car.getRowPosition()) + "]");
+        }
+    }
+
+    private static void printInitialState() {
+        System.out.println("initial parkingLot: ");
+        char[][] initialState = initialGrid.getCurrentState();
+        for (int i = 0; i < initialState.length; i++) {
+            for (int j = 0; j < initialState[0].length; j++) {
+                System.out.print(initialState[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println("=======================================");
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -503,10 +575,13 @@ public class Main {
                 BugRushReader rushReader = new BugRushReader();
                 rushReader.readBugRushFile(requestedFile);
                 TrafficGrid trafficGrid = rushReader.getInitialState();
+                initialGrid = trafficGrid;
                 parkingLotWidth = trafficGrid.getParkingLotWidth();
                 parkingLotHeight = trafficGrid.getParkingLotHeight();
 
                 determineGoalState(trafficGrid);
+//                    System.out.println("Found Goal State...");
+
 
 
                 TrafficState initialState = new TrafficState(trafficGrid.getCurrentState());
@@ -527,41 +602,24 @@ public class Main {
 
                     currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
 
-                    if (checkGoalClear(currentTrafficGrid.getCurrentState(),trafficGrid)) {
+                    if (checkGoalClear(currentTrafficGrid, trafficGrid)) {
                         // found the way...
-                        System.out.println("solved in "+ currentTrafficGrid.getMovesWeight() + " moves");
+                        System.out.println("solved in " + currentTrafficGrid.getMovesWeight() + " moves");
                         break;
-                    }
-                    else {
-                        getNextStates(currentTrafficGrid, currentTrafficGrid.getIdleCars(),trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
+                    } else {
+                        getNextStates(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
                 }
-
+                System.out.println(args[0] + " is unsat");
 
 
             } catch (FileNotFoundException e) {
                 throw new FileNotFoundException(args[0] + " Not Found");
             }
 
-        }
-        catch (ArrayIndexOutOfBoundsException arrayOutBounds) {
+        } catch (ArrayIndexOutOfBoundsException arrayOutBounds) {
             System.out.println("provide a .bugs file as an argument...");
         }
 
-
-
-    }
-
-    private static boolean checkGoalClear(char[][] currentState,TrafficGrid trafficGrid) {
-        // count backwards and determine if the path is clear to stop wasted moves..
-        int[] goalState = trafficGrid.getGoalState();;
-        for (int i = 0; i < currentState[0].length; i++) {
-            for (int j = 0; j < currentState.length; j++) {
-                if (currentState[i][j] == '>') {
-                    return (i == goalState[0] && j == goalState[1]);
-                }
-            }
-        }
-        return false;
     }
 }

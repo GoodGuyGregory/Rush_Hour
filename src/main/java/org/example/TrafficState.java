@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrafficState implements Comparable<TrafficState>{
@@ -35,9 +36,35 @@ public class TrafficState implements Comparable<TrafficState>{
     public TrafficState() {
     }
 
+    public List<Car> idleCars(char[][] currentState) {
+        List<Car> deepCars = new ArrayList<Car>();
+        for (int i = 0; i < currentState.length; i++) {
+            for (int j = 0; j < currentState[0].length; j++) {
+                if (currentState[i][j] == '-') {
+                    Car foundCar = new Car(i, j, '-');
+                    deepCars.add(foundCar);
+                }
+
+                if (currentState[i][j] == '|') {
+                    Car foundCar = new Car(i, j, '|');
+                    deepCars.add(foundCar);
+                }
+
+                if (currentState[i][j] == '>') {
+                    Car foundCar = new Car(i, j, '>');
+                    deepCars.add(foundCar);
+                }
+
+            }
+        }
+        return deepCars;
+    }
+
     public TrafficState(char[][] currentState) {
         this.currentState = currentState;
     }
+
+
 
     @Override
     public int compareTo(TrafficState o) {

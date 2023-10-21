@@ -7,6 +7,7 @@
     <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="re">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +60,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="RushHourSolver" />
-      <option name="PROGRAM_PARAMETERS" value="\org\example\fun3x3.bugs" />
+      <option name="PROGRAM_PARAMETERS" value="\org\example\fun3x4.bugs" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/main/java" />
       <extension name="coverage">
         <pattern>
@@ -101,7 +102,8 @@
       <workItem from="1697462743602" duration="22855000" />
       <workItem from="1697591165801" duration="9657000" />
       <workItem from="1697677212068" duration="21331000" />
-      <workItem from="1697739273661" duration="5057000" />
+      <workItem from="1697739273661" duration="31797000" />
+      <workItem from="1697841125331" duration="11248000" />
     </task>
     <task id="LOCAL-00001" summary="adds list to the traffic states">
       <created>1697694845803</created>
@@ -142,42 +144,67 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>524</line>
-          <option name="timeStamp" value="34" />
+          <line>354</line>
+          <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>535</line>
-          <option name="timeStamp" value="38" />
+          <line>91</line>
+          <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="41" />
+          <line>599</line>
+          <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>529</line>
-          <option name="timeStamp" value="48" />
+          <line>609</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>64</line>
-          <option name="timeStamp" value="49" />
+          <line>224</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="50" />
+          <line>55</line>
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>604</line>
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>222</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="83" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.example.TrafficGrid" memberName="currentState" />
-        <PinnedItemInfo parentTag="org.example.TrafficState" memberName="currentState" />
       </pinned-members>
     </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((TrafficState)trafficStates.toArray()[8]).currentState" custom="org.example.TrafficState" />
+        <watch expression="((TrafficState)trafficStates.toArray()[7]).currentState" custom="org.example.TrafficState" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Rush_Hour$Main.ic" NAME="Main Coverage Results" MODIFIED="1697596643187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
