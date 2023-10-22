@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="re">
+    <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/TrafficState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +22,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -132,6 +132,17 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adds list to the traffic states" />
     <MESSAGE value="adds list to the trafficstate changes" />
@@ -144,7 +155,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>354</line>
+          <line>353</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -154,17 +165,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>599</line>
+          <line>598</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>609</line>
+          <line>608</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>224</line>
+          <line>223</line>
           <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -179,12 +190,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>604</line>
+          <line>603</line>
           <option name="timeStamp" value="79" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>222</line>
+          <line>221</line>
           <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

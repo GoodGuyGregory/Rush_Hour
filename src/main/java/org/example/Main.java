@@ -117,7 +117,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        leftBlockingCar.setVisited(false);
+
                         return false;
                     }
                 }
@@ -142,7 +142,7 @@ public class Main {
                         printTrafficGrid(currentState, idleCars);
                         return true;
                     } else {
-                        rightBlockingCar.setVisited(false);
+
                         return false;
                     }
                 }
@@ -179,7 +179,6 @@ public class Main {
                             return true;
                         }
                         else {
-                            rightBlockingCar.setVisited(false);
                             return false;
                         }
                     }
@@ -211,7 +210,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        leftBlockingCar.setVisited(false);
+
                         return false;
                     }
                 }
@@ -254,7 +253,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        aboveBlockingCar.setVisited(false);
+
                         return  false;
                     }
                 }
@@ -289,7 +288,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        belowBlockingCar.setVisited(false);
+
                         return false;
                     }
 
@@ -329,7 +328,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        belowBlockingCar.setVisited(false);
+
                         return false;
                     }
                 }
@@ -369,7 +368,7 @@ public class Main {
                         return true;
                     }
                     else {
-                        aboveBlockingCar.setVisited(false);
+
                         return false;
                     }
 
@@ -610,8 +609,8 @@ public class Main {
 
                 TrafficState initialState = new TrafficState(trafficGrid.getCurrentState());
                 // test certain states:
-                char[][] testState ={{'-', '|','-', '-'}, {' ', '>', ' ', '|'}, {'-', '-', '|', '-'}};
-                initialState.setCurrentState(testState);
+//                char[][] testState ={{'-', '|','-', '-'}, {' ', '>', ' ', '|'}, {'-', '-', '|', '-'}};
+//                initialState.setCurrentState(testState);
 
                 initialState.setIdleCars(locateCars(initialState.getCurrentState(),parkingLotWidth, parkingLotHeight));
 
