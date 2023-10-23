@@ -53,6 +53,9 @@ public class Main {
     public static void getNextStates(TrafficState trafficState, int parkingWidth, int parkingHeight) {
         // iterate through the parkingLot
 
+        // check if the current state is in the closed list...
+        // if the weight is better on this current state swap the closed list reference
+
         char[][] parkingLot = trafficState.getCurrentState();
         char[][] transitionalLot = deepClone(parkingLot);
         for (Car idleCar : trafficState.getIdleCars()) {
@@ -536,22 +539,27 @@ public class Main {
     public static boolean checkGoalClear(TrafficState currentState,TrafficGrid trafficGrid) {
         // count backwards and determine if the path is clear to stop wasted moves...
         char[][] cs = currentState.getCurrentState();
-        for (int i = 0; i < cs[0].length; i++) {
-            for (int j = 0; j < cs.length; j++) {
+        for (int i = 0; i < cs.length; i++) {
+            for (int j = 0; j < cs[0].length; j++) {
                 if (cs[i][j] == '>') {
-                    int k = 0;
-                    while (k < cs[0].length-1) {
-                        if (cs[i][k+1] == ' ') {
-                            k++;
-                        }
-                        else {
-                            // still have moving to do..
-                            return false;
-                        }
+                    if (i == trafficGrid.getGoalState()[0] && j == trafficGrid.getGoalState()[1]) {
+                        return true;
+                    } else {
+//                        int k = 0;
+//                        while (k < cs[0].length - 1) {
+//                            if (cs[i][k + 1] == ' ') {
+//                                k++;
+//                            } else {
+//                                // still have moving to do..
+//                                return false;
+//                            }
+//                        }
+//                        // add the clear moves...
+//                        currentState.setMovesWeight(currentState.getMovesWeight() + k);
+//                        return true;
+//                    }
+                        return false;
                     }
-                    // add the clear moves...
-                    currentState.setMovesWeight(currentState.getMovesWeight()+k);
-                    return true;
                 }
             }
         }
@@ -609,8 +617,6 @@ public class Main {
 
                 TrafficState initialState = new TrafficState(trafficGrid.getCurrentState());
                 // test certain states:
-//                char[][] testState ={{'-', '|','-', '-'}, {' ', '>', ' ', '|'}, {'-', '-', '|', '-'}};
-//                initialState.setCurrentState(testState);
 
                 initialState.setIdleCars(locateCars(initialState.getCurrentState(),parkingLotWidth, parkingLotHeight));
 
@@ -625,7 +631,7 @@ public class Main {
                 int[] goalStateCoords = trafficGrid.getGoalState();
 
                 while (trafficStates.size() > 0) {
-                    TrafficState currentTrafficGrid = trafficStates.remove();
+                    TrafficState currentTrafficGrid = trafficStates.poll();
 
                     currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
 
@@ -634,6 +640,10 @@ public class Main {
                         System.out.println("solved in " + currentTrafficGrid.getMovesWeight() + " moves");
                         break;
                     } else {
+                        char[][] carTest = {{'|', '-', '|', ' ' }, {' ' , '|', '>', '|'}, {'-', '-', '|', '|'}};
+                        if (Arrays.deepEquals(currentTrafficGrid.getCurrentState(), carTest)) {
+                            System.out.println("Found it");
+                        }
                         getNextStates(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
                 }
