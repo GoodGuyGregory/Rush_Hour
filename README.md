@@ -1,5 +1,7 @@
 ## BugRush Homework
 
+Greg Witt
+
 This homework is intended to build a State Space Search 
 implementation of a smaller scale version of the popular game RushHour.
 
@@ -57,6 +59,8 @@ the previously seen states are then compared by weight to ensure the outlist (in
 
 **Executing this code** 
 
+I am using JDK11 so Java11 for some of the deep copy and other functionality. I also used a custom method from a link I sited within the project in Main.java
+
 ensure all provided files are within the same package as the Main.java file.
 
 ```java
@@ -73,10 +77,9 @@ let me know if you have any trouble with this, as I had some problems without th
 
 **Additional Sources**
 
-[Rushhour Solver in Python](https://medium.com/swlh/programming-puzzle-rush-hour-traffic-jam-3ee513e6c4ab)
-I followed this heavily even though it is in python. The implementation of the BFS is similar.
-[Reading Files in Java](https://www.geeksforgeeks.org/different-ways-reading-text-file-java/)
-[CompareTo Override for Priority Queue](https://www.geeksforgeeks.org/how-to-override-compareto-method-in-java/)
+* [Rushhour Solver in Python](https://medium.com/swlh/programming-puzzle-rush-hour-traffic-jam-3ee513e6c4ab)
+* [Reading Files in Java](https://www.geeksforgeeks.org/different-ways-reading-text-file-java/)
+* [CompareTo Override for Priority Queue](https://www.geeksforgeeks.org/how-to-override-compareto-method-in-java/)
 
 
 
