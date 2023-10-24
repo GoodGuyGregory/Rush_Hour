@@ -3,11 +3,12 @@ package org.example;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.stream.Collectors;
 
 
 public class Main {
-    public static Queue<TrafficState> trafficStates = new PriorityQueue<TrafficState>();
+    public static Queue<TrafficState> trafficStates = new ArrayDeque<TrafficState>();
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
     public static TrafficGrid initialGrid = null;
 
@@ -649,7 +650,7 @@ public class Main {
 
                 while (trafficStates.size() > 0) {
 
-                    TrafficState currentTrafficGrid = trafficStates.poll();
+                    TrafficState currentTrafficGrid = trafficStates.remove();
 
                     currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
 
