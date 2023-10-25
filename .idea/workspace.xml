@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="">
+    <list default="true" id="7c78bece-dd9e-4ef1-b6d3-fc796d248543" name="Changes" comment="re">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +61,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="RushHourSolver" />
-      <option name="PROGRAM_PARAMETERS" value="\org\example\hardest3x3.bugs" />
+      <option name="PROGRAM_PARAMETERS" value="\org\example\some5x7.bugs" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/main/java" />
       <extension name="coverage">
         <pattern>
@@ -103,6 +105,10 @@
       <workItem from="1697677212068" duration="21331000" />
       <workItem from="1697739273661" duration="31797000" />
       <workItem from="1697841125331" duration="11248000" />
+      <workItem from="1698068891928" duration="114000" />
+      <workItem from="1698185815292" duration="1959000" />
+      <workItem from="1698260530825" duration="3978000" />
+      <workItem from="1698265148512" duration="695000" />
     </task>
     <task id="LOCAL-00001" summary="adds list to the traffic states">
       <created>1697694845803</created>
@@ -154,13 +160,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>630</line>
+          <line>631</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <condition expression="currentState.getMovesWeight() &lt;= 34" language="JAVA" />
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>539</line>
+          <line>540</line>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
       </breakpoints>

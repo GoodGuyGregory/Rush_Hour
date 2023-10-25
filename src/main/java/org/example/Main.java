@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 public class Main {
-    public static Queue<TrafficState> trafficStates = new ArrayDeque<TrafficState>();
+    public static Queue<TrafficState> trafficStates = new ArrayDeque<>();
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
     public static TrafficGrid initialGrid = null;
 
@@ -650,7 +650,7 @@ public class Main {
 
                 while (trafficStates.size() > 0) {
 
-                    TrafficState currentTrafficGrid = trafficStates.remove();
+                    TrafficState currentTrafficGrid = trafficStates.poll();
 
                     currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
 
