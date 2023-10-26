@@ -12,7 +12,6 @@ public class Main {
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
     public static TrafficGrid initialGrid = null;
 
-    public static int movesToSolve = 0;
 
     public static char[][] initialParkingLot(char[][] intialLot) {
         char[][] deepCopyParkingLot = new char[intialLot.length][intialLot[0].length];
@@ -72,10 +71,18 @@ public class Main {
             }
             // if horizontal Car...
             // add all horizontal logic..
-            if (idleCar.getSymbol() == '>' || idleCar.getSymbol() == '-') {
+            if (idleCar.getSymbol() == '-') {
                 TrafficState transitionalState = new TrafficState();
                 transitionalState.setMovesWeight(trafficState.getMovesWeight());
                 if (horizontalMove(transitionalState, idleCar, parkingWidth, transitionalLot, trafficState.getIdleCars())) {
+                    transitionalLot = deepClone(parkingLot);
+                }
+            }
+
+            if (idleCar.getSymbol() == '>' ) {
+                TrafficState transitionalState = new TrafficState();
+                transitionalState.setMovesWeight(trafficState.getMovesWeight());
+                if (horizontalGoalMove(transitionalState, idleCar, parkingWidth, transitionalLot, trafficState.getIdleCars())) {
                     transitionalLot = deepClone(parkingLot);
                 }
             }
@@ -138,6 +145,142 @@ public class Main {
                 if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
                     rightBlockingCar.setVisited(true);
                     if (moveSingleCar(trafficState,rightBlockingCar, currentState, idleCars)) {
+                        //printTrafficGrid(currentState, idleCars);
+                        return true;
+                    } else {
+
+                        return false;
+                    }
+                }
+                return false;
+            }
+        } else {
+            // left most position
+            if (movingCar.getColPosition() == 0) {
+                // stuck in the last position for left moves..
+                // check the right side..
+                // let's potentially move it
+                char rightSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() + 1];
+                // check for opening
+                if (Character.isSpaceChar(rightSpace)) {
+                    // make the move right
+                    if (cleanHorizMoveHelper(trafficState,movingCar, "right", currentState)) {
+                        //printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                } else {
+                    // blocked on the right
+                    // check to see if the block can move...
+                    Car rightBlockingCar = idleCars.stream().filter(car -> {
+                        return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1));
+                    }).findFirst().orElse(null);
+
+                    if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
+                        rightBlockingCar.setVisited(true);
+                        if (moveSingleCar(trafficState,rightBlockingCar, currentState, idleCars)) {
+                            //printTrafficGrid(currentState, idleCars);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        // Right position look left
+        if (movingCar.getColPosition() == (parkingLotWidth - 1)) {
+            // stuck in the right position need to look for below moves
+            // let's potentially move it
+            char leftSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() - 1];
+            // check for opening
+            if (Character.isSpaceChar(leftSpace)) {
+                return cleanHorizMoveHelper(trafficState,movingCar, "left", currentState);
+            } else {
+                // blocked on the left
+                // check to see if the block can move...
+                Car leftBlockingCar = idleCars.stream().filter(car -> {
+                    return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() - 1));
+                }).findFirst().orElse(null);
+
+                if (Objects.nonNull(leftBlockingCar) && !leftBlockingCar.isVisited()) {
+                    leftBlockingCar.setVisited(true);
+                    if (moveSingleCar(trafficState,leftBlockingCar, currentState, idleCars)) {
+                        //printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static boolean horizontalGoalMove(TrafficState trafficState,Car movingCar, int parkingLotWidth, char[][] currentState, List<Car> idleCars) {
+
+        // look left logic
+        // determine the car isn't parked at the edge of a row
+        // middle scenario
+        if (movingCar.getColPosition() != 0 && movingCar.getColPosition() != (parkingLotWidth - 1)) {
+            // let's potentially move it
+            char rightSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() + 1];
+            // check for opening
+            if (Character.isSpaceChar(rightSpace)) {
+                // make the move left
+                if (cleanHorizMoveHelper(trafficState,movingCar, "right", currentState)) {
+                    return true;
+                }
+                return false;
+            } else {
+                // blocked on left.
+                // check to see if the block can move...
+                Car rightBlockingCar = idleCars.stream().filter(car -> {
+                    if ((car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() - 1))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).findFirst().orElse(null);
+
+                if (Objects.nonNull(rightBlockingCar) && !rightBlockingCar.isVisited()) {
+                    rightBlockingCar.setVisited(true);
+                    if (moveSingleCar(trafficState,rightBlockingCar, currentState, idleCars)) {
+                        //printTrafficGrid(currentState, idleCars);
+                        return true;
+                    }
+                    else {
+
+                        return false;
+                    }
+                }
+            }
+            // check right space
+            // let's potentially move it
+            char leftSpace = currentState[movingCar.getRowPosition()][movingCar.getColPosition() - 1];
+            // check for opening
+            if (Character.isSpaceChar(leftSpace)) {
+                // make the move right
+                return cleanHorizMoveHelper(trafficState,movingCar, "left", currentState);
+            } else {
+                // blocked on right.
+                // check to see if the block can move...
+                Car leftBlockingCar = idleCars.stream().filter(car -> {
+                    return (car.getRowPosition() == movingCar.getRowPosition()) && (car.getColPosition() == (movingCar.getColPosition() + 1));
+                }).findFirst().orElse(null);
+
+                if (Objects.nonNull(leftBlockingCar) && !leftBlockingCar.isVisited()) {
+                    leftBlockingCar.setVisited(true);
+                    if (moveSingleCar(trafficState,leftBlockingCar, currentState, idleCars)) {
                         //printTrafficGrid(currentState, idleCars);
                         return true;
                     } else {
@@ -417,10 +560,10 @@ public class Main {
         trafficState.setCurrentState(currentState);
         String hashKey = buildKey(currentState);
         trafficState.setMovesWeight(trafficState.getMovesWeight()+1);
+
         if (!seenState(hashKey)) {
             collectMovesHash(hashKey, trafficState);
             trafficStates.add(trafficState);
-            movesToSolve++;
             return true;
         }
         // revert the logic
@@ -471,10 +614,9 @@ public class Main {
         if (!seenState(hashKey)) {
             collectMovesHash(hashKey, trafficState);
             trafficStates.add(trafficState);
-            movesToSolve++;
         } else {
             // ensures its swapping for a better value.
-            if (previousStates.get(hashKey).getMovesWeight() >= trafficState.getMovesWeight()) {
+            if (previousStates.get(hashKey).getMovesWeight() > trafficState.getMovesWeight()) {
                 trafficStates.add(trafficState);
                 previousStates.put(hashKey, trafficState);
             } else {
@@ -562,19 +704,6 @@ public class Main {
                 if (cs[i][j] == '>') {
                     if (i == trafficGrid.getGoalState()[0] && j == trafficGrid.getGoalState()[1]) {
                         return true;
-                    } else {
-                        int k = 0;
-                        while (k < cs[0].length - 1) {
-                            if (cs[i][k + 1] == ' ') {
-                                k++;
-                            } else {
-                                // still have moving to do..
-                                return false;
-                            }
-                        }
-                        // add the clear moves...
-                        currentState.setMovesWeight(currentState.getMovesWeight() + k);
-                        return true;
                     }
                 }
                 }
@@ -647,6 +776,7 @@ public class Main {
 
                 int[] goalStateCoords = trafficGrid.getGoalState();
                boolean solvable = false;
+               TrafficState bestOption = null;
 
                 while (trafficStates.size() > 0) {
 
@@ -657,8 +787,14 @@ public class Main {
                     if (checkGoalClear(currentTrafficGrid, trafficGrid)) {
                         // found the way...
                         solvable = true;
-                        System.out.println(currentTrafficGrid.getMovesWeight());
-                        break;
+                        if (Objects.nonNull(bestOption)) {
+                            if (currentTrafficGrid.getMovesWeight() < bestOption.getMovesWeight()) {
+                                bestOption = currentTrafficGrid;
+                            }
+                        }
+                        else {
+                            bestOption = currentTrafficGrid;
+                        }
                     } else {
                         getNextStates(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
@@ -666,6 +802,9 @@ public class Main {
 
                 if (solvable == false) {
                     System.out.println("unsat");
+                }
+                else {
+                    System.out.println(bestOption.getMovesWeight());
                 }
 
 
