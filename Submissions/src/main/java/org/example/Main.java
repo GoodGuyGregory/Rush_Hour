@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 public class Main {
-    public static Queue<TrafficState> trafficStates = new ArrayDeque<TrafficState>();
+    public static Queue<TrafficState> trafficStates = new ArrayDeque<>();
     public static HashMap<String, TrafficState> previousStates = new HashMap<String, TrafficState>();
     public static TrafficGrid initialGrid = null;
 
@@ -562,20 +562,19 @@ public class Main {
                 if (cs[i][j] == '>') {
                     if (i == trafficGrid.getGoalState()[0] && j == trafficGrid.getGoalState()[1]) {
                         return true;
-//                    } else {
-//                        int k = 0;
-//                        while (k < cs[0].length - 1) {
-//                            if (cs[i][k + 1] == ' ') {
-//                                k++;
-//                            } else {
-//                                // still have moving to do..
-//                                return false;
-//                            }
-//                        }
-//                        // add the clear moves...
-//                        currentState.setMovesWeight(currentState.getMovesWeight() + k);
-//                        return true;
-//                    }
+                    } else {
+                        int k = 0;
+                        while (k < cs[0].length - 1) {
+                            if (cs[i][k + 1] == ' ') {
+                                k++;
+                            } else {
+                                // still have moving to do..
+                                return false;
+                            }
+                        }
+                        // add the clear moves...
+                        currentState.setMovesWeight(currentState.getMovesWeight() + k);
+                        return true;
                     }
                 }
                 }
@@ -649,35 +648,21 @@ public class Main {
                 int[] goalStateCoords = trafficGrid.getGoalState();
                boolean solvable = false;
 
-               TrafficState bestState = null;
-
                 while (trafficStates.size() > 0) {
 
-                    TrafficState currentTrafficGrid = trafficStates.remove();
+                    TrafficState currentTrafficGrid = trafficStates.poll();
 
-                        currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
+                    currentTrafficGrid.setIdleCars(locateCars(currentTrafficGrid.getCurrentState(), parkingLotWidth, parkingLotHeight));
 
-                        if (checkGoalClear(currentTrafficGrid, trafficGrid)) {
-                            // found the way...
-                            solvable = true;
-                            if (Objects.nonNull(bestState)) {
-                                if (bestState.getMovesWeight() > currentTrafficGrid.getMovesWeight())
-                                    bestState = currentTrafficGrid;
-                            }
-                            // best not found yet...
-                            else {
-                                bestState = currentTrafficGrid;
-                            }
-                        } else {
-                            getNextStates(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
-                        }
+                    if (checkGoalClear(currentTrafficGrid, trafficGrid)) {
+                        // found the way...
+                        solvable = true;
+                        System.out.println(currentTrafficGrid.getMovesWeight());
+                        break;
+                    } else {
+                        getNextStates(currentTrafficGrid, trafficGrid.getParkingLotWidth(), trafficGrid.getParkingLotHeight());
                     }
-
-
-                if (solvable == true) {
-                    System.out.println(bestState.getMovesWeight());
                 }
-
 
                 if (solvable == false) {
                     System.out.println("unsat");
