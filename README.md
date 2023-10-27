@@ -62,14 +62,19 @@ the previously seen states are then compared by weight to ensure the outlist (in
 I am using JDK11 so Java11 for some of the deep copy and other functionality. I also used a custom method from a link I sited within the project in Main.java
 
 ensure all provided files are within the same package as the Main.java file.
+from within this directory `Rush_Hour\src\main\java`
+
+cd into `Rush_Hour\src\main\java` and then run the following commands
 
 ```java
 // within the same directory as the <something>.bugs file
 javac *.java && java main <currentWorkingDir>/<example>.bugs 
 
 // actual example
-javac *.java && java Main \org\example\hardest3x3.bugs
-
+// from within this directory Rush_Hour\src\main\java
+// compile the code
+javac org/example/*.java       
+java org/example/Main ./org/example/hardest3x4.bugs
 ```
 
 let me know if you have any trouble with this, as I had some problems without the files being all in the same directory.
