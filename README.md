@@ -1,8 +1,8 @@
-## BugRush Homework
+## BugRush Project
 
 Greg Witt
 
-This homework is intended to build a State Space Search 
+This project is intended to build a State Space Search 
 implementation of a smaller scale version of the popular game RushHour.
 
 This popular game requires users to solve the puzzle by moving blocking cars out of the way of a specific car among a grid
